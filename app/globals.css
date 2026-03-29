@@ -1,0 +1,50 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap');
+}
+
+@theme {
+  --color-background: hsl(0 0% 99.5%);
+  --color-foreground: hsl(0 0% 15%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(0 0% 15%);
+  --color-primary: hsl(258 90% 65%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(0 0% 95%);
+  --color-secondary-foreground: hsl(0 0% 25%);
+  --color-muted: hsl(0 0% 88%);
+  --color-muted-foreground: hsl(0 0% 45%);
+  --color-accent: hsl(258 90% 65%);
+  --color-accent-foreground: hsl(0 0% 100%);
+  --color-destructive: hsl(0 84% 60%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-border: hsl(0 0% 92%);
+  --color-input: hsl(0 0% 97%);
+  --color-ring: hsl(258 90% 65%);
+  --radius: 0.5rem;
+  --font-serif: 'Playfair Display', serif;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  h1, h2, h3 {
+    @apply font-serif font-semibold;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl tracking-tight;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl tracking-tight;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+}
