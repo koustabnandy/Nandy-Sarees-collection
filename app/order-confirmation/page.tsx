@@ -2,7 +2,7 @@
 
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-import { useSearchParams } from 'next/navigation';
+
 import Link from 'next/link';
 import { CheckCircle, Mail, MessageCircle } from 'lucide-react';
 import { useEffect, useState, Suspense } from 'react';
@@ -26,8 +26,7 @@ interface OrderData {
 
 /* ✅ Move logic here */
 function OrderConfirmationContent() {
-  const searchParams = useSearchParams();
-  const orderId = searchParams.get('orderId') || '';
+  
 
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [mounted, setMounted] = useState(false);
