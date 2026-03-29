@@ -24,7 +24,6 @@ interface FormData {
 export default function CheckoutPage() {
   const { items, mounted, clearCart } = useCart();
   const router = useRouter();
-  const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
@@ -36,7 +35,7 @@ export default function CheckoutPage() {
     city: '',
     state: '',
     pincode: '',
-    paymentMethod: 'card',
+    paymentMethod: 'cod',
   });
 
   // ✅ Order calculations
@@ -58,7 +57,7 @@ export default function CheckoutPage() {
     );
   }
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -66,7 +65,7 @@ export default function CheckoutPage() {
   };
 
   // ✅ MAIN SUBMIT FUNCTION
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     if (
@@ -88,7 +87,6 @@ export default function CheckoutPage() {
 
       const orderData = {
         orderId,
-
         fullName: formData.firstName + " " + formData.lastName,
         email: formData.email,
         phone: formData.phone,
@@ -120,33 +118,14 @@ export default function CheckoutPage() {
 
       console.log("Submitting order:", orderData);
 
-      // ✅ 1. Save to Firebase
-      await saveOrderToFirebase(orderData);
-
-      // ✅ 2. Send to Google Sheets
+      // ✅ ONLY FIREBASE SAVE
       try {
-        await fetch("https://script.google.com/macros/s/AKfycbyHlNOraZJy43gzLxbYtOyogdM8UJ2Dx0A1h6ImPN_dct0ZHXCSmFxH39aXU5PtMBou/exec", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            orderId: orderData.orderId,
-            fullName: orderData.fullName,
-            phone: orderData.phone,
-            productName: orderData.items[0]?.name,
-            productPrice: orderData.items[0]?.price,
-            quantity: orderData.items[0]?.quantity,
-            status: orderData.status,
-          }),
-        });
-      } catch (err) {
-        console.log("Sheet error (ignored):", err);
-      }
-
-      // ✅ 3. Save locally (optional)
-      localStorage.setItem("lastOrder", JSON.stringify(orderData));
-
+  await saveOrderToFirebase(orderData);
+} catch (error) {
+  console.error("Firebase error:", error);
+  alert("Order failed. Please try again.");
+  return;
+}
       setSubmitted(true);
       clearCart();
 
@@ -174,9 +153,9 @@ export default function CheckoutPage() {
         <input name="state" placeholder="State" onChange={handleChange} required />
         <input name="pincode" placeholder="Pincode" onChange={handleChange} required />
 
-        <button type="submit">
-          {submitted ? "Processing..." : "Place Order"}
-        </button>
+        <button type="submit" disabled={submitted}>
+  {submitted ? "Processing..." : "Place Order"}
+</button>
       </form>
 
       <Footer />

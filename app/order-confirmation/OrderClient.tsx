@@ -18,7 +18,15 @@ export default function OrderClient() {
   }, []);
 
   if (!mounted) return null;
-
+  if (!orderId) {
+  return (
+    <div>
+      <Header />
+      <p className="text-center mt-10">Invalid Order</p>
+      <Footer />
+    </div>
+  );
+}
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />

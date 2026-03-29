@@ -6,8 +6,10 @@ import { ProductCard } from '@/components/product-card';
 import { PRODUCTS } from '@/lib/products';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
-export default function SearchPage() {
+// ✅ Move your main logic into a child component
+function SearchContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
 
@@ -44,7 +46,9 @@ export default function SearchPage() {
           <div className="text-center py-16">
             <div className="bg-secondary rounded-lg p-8 mb-6">
               <p className="text-lg text-muted-foreground mb-4">
-                {query ? `No products found for "${query}"` : 'Enter a search term to find sarees'}
+                {query
+                  ? `No products found for "${query}"`
+                  : 'Enter a search term to find sarees'}
               </p>
               <Link
                 href="/collections"
@@ -59,5 +63,14 @@ export default function SearchPage() {
 
       <Footer />
     </div>
+  );
+}
+
+// ✅ Wrap with Suspense
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<div className="text-center mt-10">Loading...</div>}>
+      <SearchContent />
+    </Suspense>
   );
 }
