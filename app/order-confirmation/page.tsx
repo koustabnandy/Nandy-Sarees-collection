@@ -1,11 +1,8 @@
-'use client';
-
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-
 import Link from 'next/link';
-import { CheckCircle, Mail, MessageCircle } from 'lucide-react';
-import { useEffect, useState, Suspense } from 'react';
+import { CheckCircle } from 'lucide-react';
+import { Suspense } from 'react';
 
 interface OrderData {
   orderId: string;
@@ -24,14 +21,14 @@ interface OrderData {
   completedAt?: string;
 }
 
-/* ✅ Move logic here */
+/* ✅ CLIENT COMPONENT */
 function OrderConfirmationContent() {
-  
+  'use client';
 
-  const [orderData, setOrderData] = useState<OrderData | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const [orderData, setOrderData] = require('react').useState<OrderData | null>(null);
+  const [mounted, setMounted] = require('react').useState(false);
 
-  useEffect(() => {
+  require('react').useEffect(() => {
     setMounted(true);
     const lastOrder = localStorage.getItem('lastOrder');
     if (lastOrder) {
@@ -58,16 +55,14 @@ function OrderConfirmationContent() {
     <main className="flex-1 max-w-3xl mx-auto w-full px-4 sm:px-6 py-12">
       {orderData ? (
         <div className="text-center">
-          <div className="mb-6 flex justify-center">
-            <CheckCircle size={80} className="text-green-500" />
-          </div>
+          <CheckCircle size={80} className="text-green-500 mx-auto mb-6" />
 
-          <h1 className="font-serif text-4xl font-bold mb-2">
+          <h1 className="text-4xl font-bold mb-2">
             Order Confirmed!
           </h1>
 
           <p className="mb-8 text-lg">
-            Thank you {orderData.customer.name} for your purchase.
+            Thank you {orderData.customer.name}
           </p>
 
           <div className="bg-card rounded-lg border p-8 mb-8">
@@ -98,7 +93,7 @@ function OrderConfirmationContent() {
   );
 }
 
-/* ✅ Wrap with Suspense */
+/* ✅ SERVER COMPONENT WRAPPING CLIENT */
 export default function OrderConfirmationPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
